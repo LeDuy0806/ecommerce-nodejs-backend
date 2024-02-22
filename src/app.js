@@ -2,6 +2,7 @@ const compression = require('compression')
 const express = require('express')
 const { default: helmet } = require('helmet')
 const morgan = require('morgan')
+const { errorHandlingMiddleWare } = require('./middleware/errorHandlingMiddleWare ')
 
 const app = express()
 
@@ -19,6 +20,14 @@ require('./databases/init.mongodb')
 
 // init routes
 app.use('/', require('./routes'))
+
+app.use((req, res, next) => {
+  const error = new Error('Not found')
+  error.status = 404
+  next(error)
+})
+
+app.use(errorHandlingMiddleWare)
 
 // error handler
 

@@ -1,15 +1,13 @@
 'use strict'
 
+const { asyncHandler } = require('../helpers/asyncHandler')
 const AuthService = require('../services/auth.service')
 
 class AuthController {
-  signUp = async (req, res, next) => {
-    try {
-      return res.status(201).json(await AuthService.signUp(req.body))
-    } catch (error) {
-      next(error)
-    }
-  }
+  signUp = asyncHandler(async (req, res, next) => {
+    console.log(`[P]:: `, req.body)
+    return res.status(201).json(await AuthService.signUp(req.body))
+  })
 }
 
 module.exports = new AuthController()
