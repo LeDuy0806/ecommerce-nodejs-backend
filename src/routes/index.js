@@ -3,7 +3,7 @@
 const router = require('express').Router()
 
 // // Middleware
-// const { apiKeyValidator, permissionsValidator } = require('../middleware/auth.middleware')
+// const { apiKeyValidator, permissionsValidator } = require('../middleware/auth/checkAuth')
 
 // // check API key and permissions
 // router.use(apiKeyValidator, permissionsValidator('0000'))
