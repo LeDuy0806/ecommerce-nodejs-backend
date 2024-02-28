@@ -1,3 +1,10 @@
+const { Types } = require('mongoose')
+
+const convertToObjectIdMongodb = (id) => {
+  console.log(id)
+  return new Types.ObjectId(id)
+}
+
 const getSelectData = (select = []) => {
   return Object.fromEntries(select.map((el) => [el, 1]))
 }
@@ -32,6 +39,7 @@ const updateNestedObjectParser = (obj) => {
 }
 
 module.exports = {
+  convertToObjectIdMongodb,
   getSelectData,
   getUnSelectData,
   removeUndefineObject,

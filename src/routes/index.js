@@ -10,5 +10,6 @@ const router = require('express').Router()
 
 router.use('/api/v1', require('./auth'))
 router.use('/api/v1/product', require('./product'))
+router.use('/api/v1/discount', require('./discount'))
 
 module.exports = router

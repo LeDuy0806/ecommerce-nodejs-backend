@@ -13,6 +13,7 @@ const {
   updateProductById
 } = require('../models/repositories/product.repo')
 const { removeUndefineObject, updateNestedObjectParser } = require('../utils')
+const { insertInventory } = require('../models/repositories/inventory.model')
 
 //define Fator classs to create product
 
@@ -97,7 +98,18 @@ class Product {
 
   //create new product
   async createProduct(productId) {
-    return await product.create({ ...this, _id: productId })
+    const newProduct = await product.create({ ...this, _id: productId })
+
+    if (newProduct) {
+      await insertInventory({
+        productId: newProduct._id,
+        shopId: this.product_shop,
+        quantity: this.product_quantity,
+        stock: this.product_quantity
+      })
+    }
+
+    return newProduct
   }
 
   //update product
