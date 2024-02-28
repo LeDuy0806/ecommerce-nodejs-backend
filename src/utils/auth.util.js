@@ -8,7 +8,8 @@ const { findByUserId } = require('../services/keyToken.service')
 const HEADER = {
   API_KEY: 'x-api-key',
   AUTHORIZATION: 'authorization',
-  CLIENT_ID: 'x-client-id'
+  CLIENT_ID: 'x-client-id',
+  REFRESHTOKEN: 'refreshtoken'
 }
 
 const createTokenPair = async (payload, publicKey, privateKey) => {
@@ -49,6 +50,16 @@ const authentication = asyncHandler(async (req, res, next) => {
     throw new NotFoundError('Not found keyStore')
   }
 
+  if (req.headers[HEADER.REFRESHTOKEN]) {
+    const refreshtoken = extractBearerToken(req.headers[HEADER.REFRESHTOKEN])
+    const decodeUser = JWT.verify(refreshtoken, keyStore.publicKey)
+    if (userId !== decodeUser.userId) throw createHttpError.Unauthorized('Invalid user')
+    req.keyStore = keyStore
+    req.refreshToken = refreshtoken
+    req.user = decodeUser
+    return next()
+  }
+
   let accessToken = req.headers[HEADER.AUTHORIZATION]
   accessToken = accessToken.split(' ')[1]
   if (!accessToken) {
@@ -73,6 +84,21 @@ const authentication = asyncHandler(async (req, res, next) => {
 
 const verifyJWT = async (token, keySecret) => {
   return await JWT.verify(token, keySecret)
+}
+const extractBearerToken = (authorizationHeader) => {
+  // Kiểm tra xem chuỗi "Authorization" có tồn tại hay không
+  if (!authorizationHeader) {
+    return null
+  }
+
+  // Tách chuỗi "Bearer" và lấy phần token
+  const parts = authorizationHeader.split(' ')
+  if (parts.length === 2 && parts[0].toLowerCase() === 'bearer') {
+    return parts[1]
+  }
+
+  // Trả về null nếu định dạng không đúng
+  return null
 }
 
 module.exports = { createTokenPair, authentication, verifyJWT }

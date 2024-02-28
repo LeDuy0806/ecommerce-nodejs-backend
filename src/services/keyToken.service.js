@@ -1,7 +1,7 @@
 'use strict'
 
 const { Types } = require('mongoose')
-const keyTokenModel = require('../models/keytoken.model')
+const keyTokenModel = require('../models/keyToken.model')
 
 class KeyTokenService {
   static createKeyToken = async ({ userId, publicKey, privateKey, refreshToken }) => {

@@ -23,31 +23,25 @@ const {
   NotFoundError
 } = require('../core/error.response')
 const { findByEmail } = require('./shop.service')
-const keytokenModel = require('../models/keytoken.model')
+const keyTokenModel = require('../models/keyToken.model')
 
 class AuthService {
-  static handleRefreshToken = async ({ refreshToken }) => {
-    console.log('refreshToken :>> ', refreshToken)
+  static handleRefreshToken = async ({ user, keyStore, refreshToken }) => {
+    // console.log('refreshToken :>> ', refreshToken)
 
-    const foundKey = await KeyTokenService.findByRefreshTokenUsed(refreshToken)
+    const { userId, email, roles } = user
 
-    // check token be used
-    if (foundKey) {
-      // check user
-      const { userId, email } = await verifyJWT(refreshToken, foundKey.privateKey)
+    if (keyStore.refreshTokenUsed.includes(refreshToken)) {
+      await KeyTokenService.deleteByUserId(userId)
 
-      await KeyTokenService.deleteByKey(foundKey.user)
+      await KeyTokenService.deleteByKey(keyStore.user)
 
       throw new ForbidenError('Some thing wrong happened!')
     }
 
-    const holderToken = await KeyTokenService.findByRefreshToken(refreshToken)
-
-    if (!holderToken) {
+    if (keyStore.refreshToken !== refreshToken) {
       throw new AuthFailureError('Shop not registered')
     }
-
-    const { userId, email, roles } = await verifyJWT(refreshToken, holderToken.privateKey)
 
     const foundShop = await findByEmail({ email })
 
@@ -55,9 +49,9 @@ class AuthService {
       throw new AuthFailureError('Shop not registered')
     }
 
-    const tokens = await createTokenPair({ userId, email, roles }, holderToken.publicKey, holderToken.privateKey)
+    const tokens = await createTokenPair({ userId, email, roles }, keyStore.publicKey, keyStore.privateKey)
 
-    await keytokenModel.updateOne(
+    await keyTokenModel.updateOne(
       { refreshToken: refreshToken },
       {
         $set: {
