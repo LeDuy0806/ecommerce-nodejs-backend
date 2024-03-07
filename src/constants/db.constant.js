@@ -13,7 +13,8 @@ const DOCUMENT_NAMES = {
   API_KEY: 'ApiKey',
   PRODUCT: 'Product',
   INVENTORY: 'Inventory',
-  DISCOUNT: 'Discount'
+  DISCOUNT: 'Discount',
+  CART: 'Cart'
 }
 
 const COLLECTION_NAMES = {
@@ -22,7 +23,8 @@ const COLLECTION_NAMES = {
   API_KEYS: 'ApiKeys',
   PRODUCTS: 'Products',
   INVENTORIES: 'Inventories',
-  DISCOUNTS: 'Discounts'
+  DISCOUNTS: 'Discounts',
+  CARTS: 'Carts'
 }
 
 module.exports = {
