@@ -5,7 +5,7 @@ const { product, electronic, clothing } = require('../product.model')
 const { Types } = require('mongoose')
 
 const findAllDraftForShop = async ({ query, limit, skip }) => {
-  console.log(query)
+  // console.log(query)
   return await queryProduct({ query, limit, skip })
 }
 

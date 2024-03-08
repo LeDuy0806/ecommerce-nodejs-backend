@@ -1,11 +1,11 @@
+const InventoryService = require('../services/inventory.service')
+
 class inventoryController {
-  async getInventory(req, res, next) {
-    try {
-      const inventory = await inventoryService.getInventory()
-      res.status(200).json(inventory)
-    } catch (error) {
-      next(error)
-    }
+  addStockToInventory = async (req, res, next) => {
+    new SuccessResponse({
+      message: 'Add stock to inventory successfully',
+      metaData: await InventoryService.addStockToInventory(req.body)
+    }).send(res)
   }
 }
 

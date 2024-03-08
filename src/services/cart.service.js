@@ -6,7 +6,7 @@ const { product } = require('../models/product.model')
 const { getProductById } = require('../models/repositories/product.repo')
 
 class CartService {
-  static async createCart({ userId, product }) {
+  static async createUserCart({ userId, product }) {
     const query = { cart_userId: userId, cart_state: 'active' },
       updateOrInsert = {
         $addToSet: { cart_products: product }
@@ -29,7 +29,7 @@ class CartService {
       },
       options = { upsert: true, new: true }
     const result = await cart.findOneAndUpdate(query, updateSet, options).catch(async (data) => {
-      return await CartService.createUserCart({ userId, product })
+      return await this.createUserCart({ userId, product })
     })
     return result
   }
@@ -38,7 +38,7 @@ class CartService {
     const userCart = await cart.findOne({ cart_userId: userId })
 
     if (!userCart) {
-      return await this.createCart({ userId, product })
+      return await this.createUserCart({ userId, product })
     }
 
     if (!userCart.cart_products.length) {
@@ -68,7 +68,7 @@ class CartService {
     ]
   */
   static async addToCartV2({ userId, shop_order_ids = [] }) {
-    console.log(shop_order_ids)
+    // console.log(shop_order_ids)
 
     const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0]
 

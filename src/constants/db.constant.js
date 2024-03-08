@@ -14,7 +14,8 @@ const DOCUMENT_NAMES = {
   PRODUCT: 'Product',
   INVENTORY: 'Inventory',
   DISCOUNT: 'Discount',
-  CART: 'Cart'
+  CART: 'Cart',
+  ORDER: 'Order'
 }
 
 const COLLECTION_NAMES = {
@@ -24,7 +25,8 @@ const COLLECTION_NAMES = {
   PRODUCTS: 'Products',
   INVENTORIES: 'Inventories',
   DISCOUNTS: 'Discounts',
-  CARTS: 'Carts'
+  CARTS: 'Carts',
+  ORDERS: 'Orders'
 }
 
 module.exports = {
